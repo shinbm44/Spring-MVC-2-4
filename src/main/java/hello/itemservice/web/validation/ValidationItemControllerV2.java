@@ -169,6 +169,13 @@ public class ValidationItemControllerV2 {
     @PostMapping("/add")
     public String addItemV4(@ModelAttribute Item item, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) {
 
+        //검증에 실패하면 다시 입력 폼으로
+        if(bindingResult.hasErrors()) {
+            log.info("errors = {}", bindingResult);
+            // bindingResult는 자동으로 view에 넘겨준다.
+            return "validation/v2/addForm";
+        }
+
         //검증 로직
         if(!StringUtils.hasText(item.getItemName())) {
             bindingResult.rejectValue("itemName", "required");
@@ -189,7 +196,6 @@ public class ValidationItemControllerV2 {
                 bindingResult.reject("totalPriceMin", new Object[]{10000, resultPrice}, null );
             }
         }
-
 
 
         //검증에 실패하면 다시 입력 폼으로
