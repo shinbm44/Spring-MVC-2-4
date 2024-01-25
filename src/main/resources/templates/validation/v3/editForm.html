@@ -8,6 +8,13 @@
         .container {
             max-width: 560px;
         }
+
+        .field-error {
+            border-color: #dc3545;
+            color: #dc3545;
+
+        }
+
     </style>
 </head>
 <body>
@@ -19,21 +26,37 @@
     </div>
 
     <form action="item.html" th:action th:object="${item}" method="post">
+
+        <!-- #fields로 BindingResult가 제공하는 검증 오류에 접근 가능하다. -->
+        <div th:if="${#fields.hasGlobalErrors()}">
+            <p class="field-error" th:each="err : ${#fields.globalErrors()}" th:text="${err}">전체 오류 메세지</p>
+        </div>
+
         <div>
             <label for="id" th:text="#{label.item.id}">상품 ID</label>
             <input type="text" id="id" th:field="*{id}" class="form-control" readonly>
         </div>
         <div>
             <label for="itemName" th:text="#{label.item.itemName}">상품명</label>
-            <input type="text" id="itemName" th:field="*{itemName}" class="form-control">
+            <input type="text" id="itemName" th:field="*{itemName}" th:errorclass="field-error" class="form-control">
+            <div class="field-error" th:errors="*{itemName}">
+                <!-- th:errors 은 타임리프에서 제공하는 기능 / 해당 필드에 에러가 있으면 출력 아니면 출력X -->
+                상품명 오류
+            </div>
         </div>
         <div>
             <label for="price" th:text="#{label.item.price}">가격</label>
-            <input type="text" id="price" th:field="*{price}" class="form-control">
+            <input type="text" id="price" th:field="*{price}" th:errorclass="field-error" class="form-control">
+            <div class="field-error" th:errors="*{price}">
+                가격 오류
+            </div>
         </div>
         <div>
             <label for="quantity" th:text="#{label.item.quantity}">수량</label>
-            <input type="text" id="quantity" th:field="*{quantity}" class="form-control">
+            <input type="text" id="quantity" th:field="*{quantity}" th:errorclass="field-error" class="form-control">
+            <div class="field-error" th:errors="*{quantity}">
+                수량 오류
+            </div>
         </div>
 
         <hr class="my-4">
